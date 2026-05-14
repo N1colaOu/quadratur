@@ -21,9 +21,12 @@ def get_lagrange_base(n, x):
     return lagr_base
 
 def get_weights_i(n, li):
-    wi = fr.Fraction()
-    for i in range(1, n+1, 2):
-        to_add = fr.Fraction((li[i] - 1),i)
+    """wi = fr.Fraction()"""
+    wi = 0
+    coeffs = li.convert().coef
+    for i in range(1, n+2, 2):
+        """to_add = fr.Fraction((li.coef[i] - 1),i)"""
+        to_add = coeffs[i-1] / i
         wi += to_add
     wi *= 2
     return wi
