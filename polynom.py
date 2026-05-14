@@ -1,15 +1,14 @@
 import fractions as fr
 import numpy.polynomial.polynomial as poly
-import numbers as num
 
 def get_lagrange_pol_i(n, x, i):
     lagr_pol = 1
     for j in range(n + 1):
         if i  != j:
-            x_coeff =  -x[j] / (x[i] - x[j])
-            """fr.Fraction(-x[j], (x[i] - x[j]))"""
-            free_coeff = 1 / (x[i] - x[j])
-            """fr.Fraction(1, (x[i] - x[j]))""" 
+            #x_coeff =  -x[j] / (x[i] - x[j])
+            x_coeff = fr.Fraction(-x[j]/(x[i] - x[j]))
+            #free_coeff = 1 / (x[i] - x[j])
+            free_coeff = fr.Fraction(1/(x[i] - x[j]))
             to_mult =  poly.Polynomial([x_coeff, free_coeff])
             lagr_pol = poly.polymul(to_mult, lagr_pol)
     return poly.Polynomial(lagr_pol)
@@ -25,8 +24,8 @@ def get_weights_i(n, li):
     wi = 0
     coeffs = li.convert().coef
     for i in range(1, n+2, 2):
-        """to_add = fr.Fraction((li.coef[i] - 1),i)"""
-        to_add = coeffs[i-1] / i
+        to_add = fr.Fraction(coeffs[i-1]/i)
+        #to_add = coeffs[i-1] / i
         wi += to_add
     wi *= 2
     return wi
