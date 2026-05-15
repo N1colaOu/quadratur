@@ -49,14 +49,14 @@ def print_base(base): # help method for pretty printing
         print(b)
 
 def calculate_quadrature(f, n, a, b, open = True):
-    if open:
+    if open:# we choose either open or closed newton cotes 
         t = get_oNC(n)
     else:
         t = get_cNC(n)
-    t_wrapper = (b-a)/2 * t + (a+b)/2
+    t_wrapper = fr.Fraction((b-a)/2) * t + fr.Fraction((a+b)/2) #we bring the interval from [a,b] to [-1,1]
     omegas = get_weights(n, t)
     res = 0
     for i in range(n+1):
         res += omegas[i] * f(t_wrapper[i])
-    res *= (b-a)/2
+    res *= (b-a)/2 # we multiplty to keep consistent with the intervall
     return res
