@@ -1,6 +1,5 @@
 import numpy as np
 import fractions as fr
-import numpy.polynomial.polynomial as poly
 
 def get_cNC(n):
     #n is the amount of intervalls, x_0 is start pos (def -1) and x_n is end (def 1)
@@ -13,14 +12,23 @@ def get_oNC(n):
     return x[1:n+2]
 
 def get_lagrange_pol_i(n, x, i): # get ith lagrange polynom
-    lagr_pol = 1
+    lagr_pol = [fr.Fraction(1)]
     for j in range(n + 1):
         if i  != j:
             x_coeff = fr.Fraction(-x[j]/(x[i] - x[j]))
             free_coeff = fr.Fraction(1/(x[i] - x[j]))
-            to_mult =  poly.Polynomial([x_coeff, free_coeff])
-            lagr_pol = poly.polymul(to_mult, lagr_pol) # we keep updating the product with the next term needed to be multiplied
-    return poly.Polynomial(lagr_pol)
+            to_mult = [x_coeff, free_coeff]
+            lagr_pol = polmult(lagr_pol, to_mult)
+    return lagr_pol
+
+def polmult(coeffs1, coeffs2): # we multiply both polynomials
+    m = len(coeffs1)
+    n = len(coeffs2)
+    prod = [fr.Fraction()] * (m + n - 1)
+    for i in range(m):
+        for j in range(n):
+            prod[i + j] += coeffs1[i] * coeffs2[j]
+    return prod
 
 def get_lagrange_base(n, x): # get the whole base of polynomials
     lagr_base = []
@@ -30,9 +38,8 @@ def get_lagrange_base(n, x): # get the whole base of polynomials
 
 def get_weights_i(n, li): # we get the ith weight by integrating the ith base pol
     wi = 0
-    coeffs = li.convert().coef
     for i in range(1, n+2, 2): # we go over only the odd indices, even ones are 0 (n+1 inclusive)
-        to_add = fr.Fraction(coeffs[i-1]/i)
+        to_add = fr.Fraction(li[i-1]/i)
         wi += to_add
     wi *= 2
     return wi
