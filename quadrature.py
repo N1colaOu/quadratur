@@ -37,8 +37,9 @@ def get_weights_i(n, li): # we get the ith weight by integrating the ith base po
     wi *= 2
     return wi
 
-def get_weights(n, l): # we get all the weights
+def get_weights(n, x): # we get all the weights
     w = []
+    l = get_lagrange_base(n, x)
     for i in range(n+1):
         w.append(get_weights_i(n, l[i]))
     return w
@@ -46,3 +47,16 @@ def get_weights(n, l): # we get all the weights
 def print_base(base): # help method for pretty printing
     for b in base:
         print(b)
+
+def calculate_quadrature(f, n, a, b, open = True):
+    if open:
+        t = get_oNC(n)
+    else:
+        t = get_cNC(n)
+    t_wrapper = (b-a)/2 * t + (a+b)/2
+    omegas = get_weights(n, t)
+    res = 0
+    for i in range(n+1):
+        res += omegas[i] * f(t_wrapper[i])
+    res *= (b-a)/2
+    return res
