@@ -1,16 +1,10 @@
 import quadrature as quad
-import numpy.polynomial.polynomial as poly
 import fractions as fr
 import numpy as np
 import matplotlib.pyplot as plt
 
-def get_converg_rate(n, a = 0, b = 1, tol = 1e-10, open = True):
-    if open:
-        x = quad.get_oNC(n)
-    else:
-        x = quad.get_cNC(n)
+def get_converg_rate(t, a = 0, b = 1, tol = 1e-10):
 
-    weights = quad.get_weights(n, x)
     power = fr.Fraction(1)
     rate = fr.Fraction()
     diff = fr.Fraction()
@@ -19,7 +13,7 @@ def get_converg_rate(n, a = 0, b = 1, tol = 1e-10, open = True):
         def f(x):
             return x**rate
         pol_int = fr.Fraction(b**power/power) - fr.Fraction(a**power/power) # integrated numerically
-        appr = quad.calculate_quadrature(f, n, a, b, open=open)
+        appr = quad.calculate_quadrature(f, t, a, b)
         diff = np.abs(appr-pol_int)
         power += 1
         rate += 1
@@ -29,17 +23,23 @@ def get_converg_rate(n, a = 0, b = 1, tol = 1e-10, open = True):
 
     
 
-def plot_converg(n_s = 1, n_e = 2, open = True, tol = 1e-10):
+def plot_converg(n_s = 1, n_e = 2, tol = 1e-10):
     n = []
     r_anal= []
-    r_appr = []
+    r_appr_oNC = []
+    r_appr_cNC = []
+    #r_appr_GQ = []
     for i in range(n_s, n_e+1):
+        t_oNC = quad.get_oNC(i)
+        t_cNC = quad.get_cNC(i)
         n.append(i)
         r_anal.append(i+1)
-        r_appr.append(get_converg_rate(i, open=False, tol = tol))
+        r_appr_oNC.append(get_converg_rate(t_oNC, tol = tol))
+        r_appr_cNC.append(get_converg_rate(t_cNC, tol = tol))
  
     plt.plot(n, r_anal, label="Analytical Convergence")
-    plt.plot(n, r_appr, label="Calculated Convergence")
+    plt.plot(n, r_appr_oNC, label="Calculated Convergence Open")
+    plt.plot(n, r_appr_cNC, label="Calculated Convergence Closed")
     plt.title("Convergnece Rate Analysis")
     plt.xlabel("Amount of Intervalls [n]")
     plt.ylabel("Convergence Rate [r]")
