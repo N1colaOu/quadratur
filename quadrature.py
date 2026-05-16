@@ -60,10 +60,10 @@ def calculate_quadrature(f, n, a, b, open = True):
         t = get_oNC(n)
     else:
         t = get_cNC(n)
-    t_wrapper = fr.Fraction((b-a)/2) * t + fr.Fraction((a+b)/2) #we bring the interval from [a,b] to [-1,1]
+    t_wrapper = fr.Fraction((b-a)/2)*t + fr.Fraction((a+b)/2) #we bring the interval from [a,b] to [-1,1]
     omegas = get_weights(n, t)
-    res = 0
+    res = fr.Fraction()
     for i in range(n+1):
         res += omegas[i] * f(t_wrapper[i])
-    res *= (b-a)/2 # we multiplty to keep consistent with the intervall
+    res *= fr.Fraction((b-a)/2) # we multiplty to keep consistent with the intervall
     return res
