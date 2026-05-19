@@ -67,4 +67,4 @@ def calculate_quadrature(f, t, a, b):
     for i in range(n+1):
         res += omegas[i] * f(t_wrapper[i])
     res *= fr.Fraction((b-a)/2) # we multiplty to keep consistent with the intervall
-    return res
+    return res # we return the result of the quadrature formula
