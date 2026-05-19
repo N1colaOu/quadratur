@@ -11,6 +11,9 @@ def get_oNC(n):
     x = np.linspace(-1, 1, n+3, dtype=float)
     return x[1:n+2]
 
+def get_LGC(n):
+    pass
+
 def get_lagrange_pol_i(x, i): # get ith lagrange polynom
     n = len(x) - 1
     lagr_pol = [fr.Fraction(1)]
