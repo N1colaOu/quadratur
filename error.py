@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 
 def get_converg_rate(t, a = 0, b = 1, tol = 1e-10):
 
-    power = fr.Fraction(1)
-    rate = fr.Fraction()
+    power = int(1)
+    rate = int(0)
     diff = fr.Fraction()
 
     while diff < tol: # if the difference is too big, then we assume they are different
@@ -14,7 +14,7 @@ def get_converg_rate(t, a = 0, b = 1, tol = 1e-10):
             return x**rate
         pol_int = fr.Fraction(b**power/power) - fr.Fraction(a**power/power) # integrated numerically
         appr = quad.calculate_quadrature(f, t, a, b)
-        diff = np.abs(appr-pol_int)
+        diff = fr.Fraction(np.abs(appr-pol_int))
         power += 1
         rate += 1
 
