@@ -59,18 +59,16 @@ def get_oNC(n):
     return x[1:n+2], omegas
 
 def get_LG(n): #n as defined in the lectures is the last index of the points so: x_0 ... x_n, therfore n+1 points in total
-    jacobian = np.zeros([n+1, n+1])
-        
-    for row in range(n):
-        i = row + 1
-        beta_i = np.sqrt(i**2/(4*i**2-1))
-        jacobian[row, row + 1] = beta_i
-        jacobian[row + 1, row] = beta_i
     
+    jacobian = np.zeros([n+1, n+1])    
+    beta = [i/np.sqrt(4*i**2-1) for i in range(1, n+1)]
+
+    jacobian += np.diag(beta, 1)
+    jacobian += np.diag(beta, -1)
     
     ew, ev = np.linalg.eig(jacobian)
     v = ev[0]
-    weights = 2*v.transpose()*v
+    weights = 2*v.T*v
     return ew, weights
 
 def print_base(base): # help method for pretty printing
