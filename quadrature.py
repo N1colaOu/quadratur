@@ -11,8 +11,20 @@ def get_oNC(n):
     x = np.linspace(-1, 1, n+3, dtype=float)
     return x[1:n+2]
 
-def get_LGC(n):
-    pass
+def get_LGC(n): #n as defined in the lectures is the last index of the points so: x_0 ... x_n, therfore n+1 points in total
+    
+    jacobian = np.zeros([n+1, n+1])
+        
+    for row in range(n):
+        i = row + 1
+        beta_i = np.sqrt(i**2/(4*i**2-1))
+        jacobian[row, row + 1] = beta_i
+        jacobian[row + 1, row] = beta_i
+    
+    
+    nodes = np.linalg.eigvals(jacobian)
+    return nodes
+
 
 def get_lagrange_pol_i(x, i): # get ith lagrange polynom
     n = len(x) - 1
@@ -41,7 +53,7 @@ def get_lagrange_base(x): # get the whole base of polynomials
         lagr_base.append(get_lagrange_pol_i(x, i))
     return lagr_base
 
-def get_weights_i(li): # we get the ith weight by integrating the ith base pol
+def get_lagrange_weights_i(li): # we get the ith weight by integrating the ith base pol
     n = len(li) - 1
     wi = 0
     for i in range(1, n+2, 2): # we go over only the odd indices, even ones are 0 (n+1 inclusive)
@@ -50,12 +62,12 @@ def get_weights_i(li): # we get the ith weight by integrating the ith base pol
     wi *= 2
     return wi
 
-def get_weights(x): # we get all the weights
+def get_lagrange_weights(x): # we get all the weights
     n = len(x) - 1
     w = []
     l = get_lagrange_base(x)
     for i in range(n+1):
-        w.append(get_weights_i(l[i]))
+        w.append(get_lagrange_weights_i(l[i]))
     return w
 
 def print_base(base): # help method for pretty printing
@@ -65,7 +77,7 @@ def print_base(base): # help method for pretty printing
 def calculate_quadrature(f, t, a, b):
     n = len(t) - 1
     t_wrapper = fr.Fraction((b-a)/2)*t + fr.Fraction((a+b)/2) #we bring the interval from [a,b] to [-1,1]
-    omegas = get_weights(t)
+    omegas = get_lagrange_weights(t)
     res = fr.Fraction()
     for i in range(n+1):
         res += omegas[i] * f(t_wrapper[i])
