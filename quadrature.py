@@ -1,31 +1,6 @@
 import numpy as np
 import fractions as fr
 
-def get_cNC(n):
-    #n is the amount of intervalls, x_0 is start pos (def -1) and x_n is end (def 1)
-    x = np.linspace(-1, 1, n+1, dtype=float)
-    return x
-
-def get_oNC(n):
-    #analog to the closed version we divide the interval, but in more teilintervalls and we take the vals without both ends
-    x = np.linspace(-1, 1, n+3, dtype=float)
-    return x[1:n+2]
-
-def get_LGC(n): #n as defined in the lectures is the last index of the points so: x_0 ... x_n, therfore n+1 points in total
-    
-    jacobian = np.zeros([n+1, n+1])
-        
-    for row in range(n):
-        i = row + 1
-        beta_i = np.sqrt(i**2/(4*i**2-1))
-        jacobian[row, row + 1] = beta_i
-        jacobian[row + 1, row] = beta_i
-    
-    
-    nodes = np.linalg.eigvals(jacobian)
-    return nodes
-
-
 def get_lagrange_pol_i(x, i): # get ith lagrange polynom
     n = len(x) - 1
     lagr_pol = [fr.Fraction(1)]
@@ -60,7 +35,7 @@ def get_lagrange_weights_i(li): # we get the ith weight by integrating the ith b
         to_add = fr.Fraction(li[i-1]/i)
         wi += to_add
     wi *= 2
-    return wi
+    return float(wi)
 
 def get_lagrange_weights(x): # we get all the weights
     n = len(x) - 1
@@ -70,16 +45,43 @@ def get_lagrange_weights(x): # we get all the weights
         w.append(get_lagrange_weights_i(l[i]))
     return w
 
+#############################################################################################
+def get_cNC(n):
+    #n is the amount of intervalls, x_0 is start pos (def -1) and x_n is end (def 1)
+    x = np.linspace(-1, 1, n+1, dtype=float)
+    omegas = get_lagrange_weights(x)
+    return x, omegas
+
+def get_oNC(n):
+    #analog to the closed version we divide the interval, but in more teilintervalls and we take the vals without both ends
+    x = np.linspace(-1, 1, n+3, dtype=float)
+    omegas = get_lagrange_weights(x[1:n+2])
+    return x[1:n+2], omegas
+
+def get_LG(n): #n as defined in the lectures is the last index of the points so: x_0 ... x_n, therfore n+1 points in total
+    jacobian = np.zeros([n+1, n+1])
+        
+    for row in range(n):
+        i = row + 1
+        beta_i = np.sqrt(i**2/(4*i**2-1))
+        jacobian[row, row + 1] = beta_i
+        jacobian[row + 1, row] = beta_i
+    
+    
+    ew, ev = np.linalg.eig(jacobian)
+    v = ev[0]
+    weights = 2*v.transpose()*v
+    return ew, weights
+
 def print_base(base): # help method for pretty printing
     for b in base:
         print(b)
 
-def calculate_quadrature(f, t, a, b):
+def calculate_quadrature(f, t, w, a, b):
     n = len(t) - 1
     t_wrapper = fr.Fraction((b-a)/2)*t + fr.Fraction((a+b)/2) #we bring the interval from [a,b] to [-1,1]
-    omegas = get_lagrange_weights(t)
     res = fr.Fraction()
     for i in range(n+1):
-        res += omegas[i] * f(t_wrapper[i])
+        res += w[i] * f(t_wrapper[i])
     res *= fr.Fraction((b-a)/2) # we multiplty to keep consistent with the intervall
     return res # we return the result of the quadrature formula

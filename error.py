@@ -3,7 +3,7 @@ import fractions as fr
 import numpy as np
 import matplotlib.pyplot as plt
 
-def get_converg_rate(t, a = 0, b = 1, tol = 1e-10):
+def get_converg_rate(t, w, a = 0, b = 1, tol = 1e-10):
 
     power = int(1)
     rate = int(0)
@@ -13,7 +13,7 @@ def get_converg_rate(t, a = 0, b = 1, tol = 1e-10):
         def f(x):
             return x**rate
         pol_int = fr.Fraction(b**power/power) - fr.Fraction(a**power/power) # integrated numerically
-        appr = quad.calculate_quadrature(f, t, a, b)
+        appr = quad.calculate_quadrature(f, t, w, a, b)
         diff = fr.Fraction(np.abs(appr-pol_int))
         power += 1
         rate += 1
@@ -30,12 +30,12 @@ def plot_converg(n_s = 1, n_e = 2, tol = 1e-10):
     r_appr_cNC = []
     #r_appr_GQ = []
     for i in range(n_s, n_e+1):
-        t_oNC = quad.get_oNC(i)
-        t_cNC = quad.get_cNC(i)
+        t_oNC, w_oNC = quad.get_oNC(i)
+        t_cNC, w_cNC = quad.get_cNC(i)
         n.append(i)
         r_anal.append(i+1)
-        r_appr_oNC.append(get_converg_rate(t_oNC, tol = tol))
-        r_appr_cNC.append(get_converg_rate(t_cNC, tol = tol))
+        r_appr_oNC.append(get_converg_rate(t_oNC, w_oNC, tol = tol))
+        r_appr_cNC.append(get_converg_rate(t_cNC, w_cNC, tol = tol))
  
     plt.plot(n, r_anal, label="Analytical Convergence")
     plt.plot(n, r_appr_oNC, label="Calculated Convergence Open")
