@@ -6,9 +6,9 @@ def get_lagrange_pol_i(x, i): # get ith lagrange polynom
     lagr_pol = [fr.Fraction(1)]
     for j in range(n + 1):
         if i  != j:
-            x_coeff = fr.Fraction(-x[j]/(x[i] - x[j]))#switch them both??
-            free_coeff = fr.Fraction(1/(x[i] - x[j]))
-            to_mult = [x_coeff, free_coeff]
+            free_coeff = fr.Fraction(-x[j]/(x[i] - x[j]))
+            x_coeff = fr.Fraction(1/(x[i] - x[j]))
+            to_mult = [free_coeff, x_coeff]
             lagr_pol = polmult(lagr_pol, to_mult)
     return lagr_pol
 
