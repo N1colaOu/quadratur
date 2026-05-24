@@ -19,9 +19,6 @@ def get_converg_rate(t, w, a = 0, b = 1, tol = 1e-10):
 
     return rate-2
 
-
-    
-
 def plot_converg_NC(n_s = 1, n_e = 2, tol = 1e-10):
     n = []
     r_theory= []
@@ -35,7 +32,7 @@ def plot_converg_NC(n_s = 1, n_e = 2, tol = 1e-10):
         r_appr_oNC.append(get_converg_rate(t_oNC, w_oNC, tol = tol))
         r_appr_cNC.append(get_converg_rate(t_cNC, w_cNC, tol = tol))
  
-    plt.scatter(n, r_theory, label="Analytical Convergence")
+    plt.plot(n, r_theory, label="Analytical Convergence")
     plt.plot(n, r_appr_oNC, label="Calculated Convergence Open")
     plt.plot(n, r_appr_cNC, label="Calculated Convergence Closed")
     plt.title("Convergnece Rate Analysis")

@@ -25,15 +25,15 @@ a2 = 3
 a3 = 4
 a4 = 5
 
-pol_4 = lambda x : (x**4)*a4 + (x**3)*a3 + (x**2)*a2 + (x)*a1 + a0
+pol_4 = lambda x : (x**4)*a4 + (x**3)*a3 + (x**2)*a2 + (x)*a1 + a0 # our polynom
 
-n_plot = 1000
+n_plot = 1000 # used to visualize our polynoms
 x_plot = np.linspace(-1, 1, n_plot)
 x_GL, w_GL = quad.get_GL(n)
 x_oNC, w_oNC = quad.get_oNC(n)
 x_cNC, w_cNC = quad.get_cNC(n)
 y_oNC = pol_4(x_oNC)
-y_inter_oNC = naive_inter(x_oNC, y_oNC, x_plot)
+y_inter_oNC = naive_inter(x_oNC, y_oNC, x_plot) # we interpolate each set of points to see what we actually integrate in the end
 y_cNC = pol_4(x_cNC)
 y_inter_cNC = naive_inter(x_cNC, y_cNC, x_plot)
 y_GL = pol_4(x_GL)
@@ -49,7 +49,7 @@ plt.scatter(x_GL, y_GL)
 plt.legend()
 plt.show()
 
-int_exact = a4/5 + a2/3 + a0
+int_exact = a4/5 + a2/3 + a0 # exact integration of our polynom
 int_exact *= 2
 int_appr_oNC = quad.calculate_quadrature(pol_4, x_oNC, w_oNC, -1, 1)
 int_appr_cNC = quad.calculate_quadrature(pol_4, x_cNC, w_cNC, -1, 1)

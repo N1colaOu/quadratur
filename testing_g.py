@@ -12,15 +12,9 @@ def f3(x):
 a1, b1 = [0, 2]
 a2, b2 = [-1, 1]
 a3, b3 = [-1, 1]
-n = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+n = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] # all n-s to calculate
 
-"""x_oNC = []
-w_oNC = []
-x_cNC = []
-w_cNC = []
-x_GL = []
-w_GL = []"""
-int1_appr_oNC = []
+int1_appr_oNC = [] # each function and each quadrature
 int1_appr_cNC = []
 int1_appr_GL = []
 
@@ -46,12 +40,6 @@ for i in n:
     int3_appr_oNC.append(quad.calculate_quadrature(f3, x_oNC, w_oNC, a3, b3))
     int3_appr_cNC.append(quad.calculate_quadrature(f3, x_oNC, w_oNC, a3, b3))
     int3_appr_GL.append(quad.calculate_quadrature(f3, x_oNC, w_oNC, a3, b3))
-"""    x_oNC.append(x1_oNC)
-    x_cNC.append(x1_cNC)
-    x_GL.append(x1_GL)
-    w_oNC.append(w1_oNC)
-    w_cNC.append(w1_cNC)
-    w_GL.append(w1_GL)"""
 
 int1_exact = np.exp(2)-1
 int2_exact = np.pi/2
