@@ -58,7 +58,7 @@ def get_oNC(n):
     omegas = get_lagrange_weights(x[1:n+2])
     return x[1:n+2], omegas
 
-def get_LG(n): #n as defined in the lectures is the last index of the points so: x_0 ... x_n, therfore n+1 points in total
+def get_GL(n): #n as defined in the lectures is the last index of the points so: x_0 ... x_n, therfore n+1 points in total
     
     jacobian = np.zeros([n+1, n+1])    
     beta = [i/np.sqrt(4*i**2-1) for i in range(1, n+1)]

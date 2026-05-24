@@ -45,18 +45,18 @@ def plot_converg_NC(n_s = 1, n_e = 2, tol = 1e-10):
     plt.legend()
     plt.show()
 
-def plot_converg_LG(n_s = 1, n_e = 2, tol = 1e-10):
+def plot_converg_GL(n_s = 1, n_e = 2, tol = 1e-10):
     n = []
     r_theory= []
-    r_appr_LG = []
+    r_appr_GL = []
     for i in range(n_s, n_e+1):
-        t_LG, w_LG = quad.get_LG(i)
+        t_GL, w_GL = quad.get_GL(i)
         n.append(i)
         r_theory.append(2*i+1)
-        r_appr_LG.append(get_converg_rate(t_LG, w_LG, tol = tol))
+        r_appr_GL.append(get_converg_rate(t_GL, w_GL, tol = tol))
  
     plt.plot(n, r_theory, label="Analytical Convergence")
-    plt.plot(n, r_appr_LG, label="Calculated Convergence Legendre")
+    plt.plot(n, r_appr_GL, label="Calculated Convergence Legendre")
     plt.title("Convergnece Rate Analysis")
     plt.xlabel("Amount of Intervalls [n]")
     plt.ylabel("Convergence Rate [r]")
