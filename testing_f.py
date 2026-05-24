@@ -18,17 +18,20 @@ def naive_inter(x, y, xi):#copied from last HW
     return yi
 
 
-def pol_4(x):
-    return (x**4)*1 + (x**3)*2 + (x**2)*1 + (x)*1 + 1 
-
 n = 2
+a0 = 1
+a1 = 2
+a2 = 3
+a3 = 4
+a4 = 5
+
+pol_4 = lambda x : (x**4)*a4 + (x**3)*a3 + (x**2)*a2 + (x)*a1 + a0
+
 n_plot = 1000
 x_plot = np.linspace(-1, 1, n_plot)
-
 x_LG, w_LG = quad.get_LG(n)
 x_oNC, w_oNC = quad.get_oNC(n)
 x_cNC, w_cNC = quad.get_cNC(n)
-
 y_oNC = pol_4(x_oNC)
 y_inter_oNC = naive_inter(x_oNC, y_oNC, x_plot)
 y_cNC = pol_4(x_cNC)
@@ -37,11 +40,26 @@ y_LG = pol_4(x_LG)
 y_inter_LG = naive_inter(x_LG, y_LG, x_plot)
 
 plt.grid()
-plt.plot(y_inter_oNC, label="Open Newton")
+plt.plot(x_plot, y_inter_oNC, label="Open Newton")
 plt.scatter(x_oNC, y_oNC)
-plt.plot(y_inter_cNC, label="Closed Newton")
+plt.plot(x_plot, y_inter_cNC, label="Closed Newton")
 plt.scatter(x_cNC, y_cNC)
-plt.plot(y_inter_LG, label="Legendre Gauss")
+plt.plot(x_plot, y_inter_LG, label="Legendre Gauss")
 plt.scatter(x_LG, y_LG)
 plt.legend()
 plt.show()
+
+int_exact = a4/5 + a2/3 + a0
+int_exact *= 2
+int_appr_oNC = quad.calculate_quadrature(pol_4, x_oNC, w_oNC, -1, 1)
+int_appr_cNC = quad.calculate_quadrature(pol_4, x_cNC, w_cNC, -1, 1)
+int_appr_LG = quad.calculate_quadrature(pol_4, x_LG, w_LG, -1, 1)
+err_oNC = np.abs(int_exact - int_appr_oNC)
+err_cNC = np.abs(int_exact - int_appr_cNC)
+err_LG = np.abs(int_exact - int_appr_LG)
+print("Error Open Newton Cotes: ", err_oNC)
+print("Error Closed Newton Cotes: ", err_cNC)
+print("Error Legendre-Gauss: ", err_LG)
+
+
+

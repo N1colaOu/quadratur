@@ -24,18 +24,18 @@ def get_converg_rate(t, w, a = 0, b = 1, tol = 1e-10):
 
 def plot_converg_NC(n_s = 1, n_e = 2, tol = 1e-10):
     n = []
-    r_anal= []
+    r_theory= []
     r_appr_oNC = []
     r_appr_cNC = []
     for i in range(n_s, n_e+1):
         t_oNC, w_oNC = quad.get_oNC(i)
         t_cNC, w_cNC = quad.get_cNC(i)
         n.append(i)
-        r_anal.append(i+1)
+        r_theory.append(i+1)
         r_appr_oNC.append(get_converg_rate(t_oNC, w_oNC, tol = tol))
         r_appr_cNC.append(get_converg_rate(t_cNC, w_cNC, tol = tol))
  
-    plt.plot(n, r_anal, label="Analytical Convergence")
+    plt.scatter(n, r_theory, label="Analytical Convergence")
     plt.plot(n, r_appr_oNC, label="Calculated Convergence Open")
     plt.plot(n, r_appr_cNC, label="Calculated Convergence Closed")
     plt.title("Convergnece Rate Analysis")
@@ -47,15 +47,15 @@ def plot_converg_NC(n_s = 1, n_e = 2, tol = 1e-10):
 
 def plot_converg_LG(n_s = 1, n_e = 2, tol = 1e-10):
     n = []
-    r_anal= []
+    r_theory= []
     r_appr_LG = []
     for i in range(n_s, n_e+1):
         t_LG, w_LG = quad.get_LG(i)
         n.append(i)
-        r_anal.append(2*i+1)
+        r_theory.append(2*i+1)
         r_appr_LG.append(get_converg_rate(t_LG, w_LG, tol = tol))
  
-    plt.plot(n, r_anal, label="Analytical Convergence")
+    plt.plot(n, r_theory, label="Analytical Convergence")
     plt.plot(n, r_appr_LG, label="Calculated Convergence Legendre")
     plt.title("Convergnece Rate Analysis")
     plt.xlabel("Amount of Intervalls [n]")
