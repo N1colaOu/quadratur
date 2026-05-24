@@ -46,15 +46,15 @@ def get_lagrange_weights(x): # we get all the weights
     return w
 
 #############################################################################################
-def get_cNC(n):
+def get_cNC(n, a=-1, b=1):
     #n is the amount of intervalls, x_0 is start pos (def -1) and x_n is end (def 1)
-    x = np.linspace(-1, 1, n+1, dtype=float)
+    x = np.linspace(a, b, n+1, dtype=float)
     omegas = get_lagrange_weights(x)
     return x, omegas
 
-def get_oNC(n):
+def get_oNC(n, a=-1, b=1):
     #analog to the closed version we divide the interval, but in more teilintervalls and we take the vals without both ends
-    x = np.linspace(-1, 1, n+3, dtype=float)
+    x = np.linspace(a, b, n+3, dtype=float)
     omegas = get_lagrange_weights(x[1:n+2])
     return x[1:n+2], omegas
 
@@ -83,3 +83,34 @@ def calculate_quadrature(f, t, w, a, b):
         res += w[i] * f(t_wrapper[i])
     res *= fr.Fraction((b-a)/2) # we multiplty to keep consistent with the intervall
     return res # we return the result of the quadrature formula
+def calculate_sum_quadrature_oNC(f, N, n, a, b):
+    points = np.linspace(a, b, N)
+    res = fr.Fraction()
+    for i in range(N-1):
+        a_new = points[i]
+        b_new = points[i+1]
+        t, w = get_oNC(n)
+        res += calculate_quadrature(f, t, w, a_new, b_new)
+    return res
+
+def calculate_sum_quadrature_cNC(f, N, n, a, b):
+    points = np.linspace(a, b, N)
+    res = fr.Fraction()
+    for i in range(N-1):
+        a_new = points[i]
+        b_new = points[i+1]
+        t, w = get_cNC(n)
+        res += calculate_quadrature(f, t, w, a_new, b_new)
+    return res
+
+def calculate_sum_quadrature_GL(f, N, n, a, b):
+    points = np.linspace(a, b, N)
+    res = fr.Fraction()
+    for i in range(N-1):
+        a_new = points[i]
+        b_new = points[i+1]
+        t, w = get_GL(n)
+        res += calculate_quadrature(f, t, w, a_new, b_new)
+    return res
+
+
