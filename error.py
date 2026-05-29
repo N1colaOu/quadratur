@@ -19,46 +19,36 @@ def get_converg_rate(t, w, a = 0, b = 1, tol = 1e-10):
 
     return rate-2
 
-def plot_converg_NC(n_s = 1, n_e = 2, tol = 1e-10):
-    n = []
-    r_theory= []
-    r_appr_oNC = []
-    r_appr_cNC = []
-    for i in range(n_s, n_e+1):
-        t_oNC, w_oNC = quad.get_oNC(i)
-        t_cNC, w_cNC = quad.get_cNC(i)
-        n.append(i)
-        r_theory.append(i+1)
-        r_appr_oNC.append(get_converg_rate(t_oNC, w_oNC, tol = tol))
-        r_appr_cNC.append(get_converg_rate(t_cNC, w_cNC, tol = tol))
- 
-    plt.plot(n, r_theory, label="Analytical Convergence")
-    plt.plot(n, r_appr_oNC, label="Calculated Convergence Open")
-    plt.plot(n, r_appr_cNC, label="Calculated Convergence Closed")
-    plt.title("Convergnece Rate Analysis")
-    plt.xlabel("Amount of Intervalls [n]")
-    plt.ylabel("Convergence Rate [r]")
-    plt.grid()
-    plt.legend()
-    plt.show()
+def plot_converg(n, method, tol = 1e-10):#one convergence func, dependant on the method
+    if method == quad.get_oNC:
+        title = "Open Newton Cotes"
+        conv = lambda x: x+1
+    elif method == quad.get_cNC:
+        title = "Closed Newton Cotes"
+        conv = lambda x: x+1
+    elif method == quad.get_GL:
+        title = "Gauss-Legendre"
+        conv = lambda x: 2*x+1
+    else:
+        pass
 
-def plot_converg_GL(n_s = 1, n_e = 2, tol = 1e-10):
-    n = []
+    n_arr = []
     r_theory= []
-    r_appr_GL = []
-    for i in range(n_s, n_e+1):
-        t_GL, w_GL = quad.get_GL(i)
-        n.append(i)
-        r_theory.append(2*i+1)
-        r_appr_GL.append(get_converg_rate(t_GL, w_GL, tol = tol))
+    r_appr = []
+    for i in range(1, n+1):
+        t, w = method(i)
+        n_arr.append(i)
+        r_theory.append(conv(i))
+        r_appr.append(get_converg_rate(t, w, tol = tol))
  
-    plt.plot(n, r_theory, label="Analytical Convergence")
-    plt.plot(n, r_appr_GL, label="Calculated Convergence Legendre")
-    plt.title("Convergnece Rate Analysis")
+    plt.figure()
+    plt.plot(n_arr, r_theory, label="Analytical Convergence")
+    plt.plot(n_arr, r_appr, label="Calculated Convergence")
+    plt.title("Convergnece Rate Analysis of " + title)
     plt.xlabel("Amount of Intervalls [n]")
     plt.ylabel("Convergence Rate [r]")
     plt.grid()
     plt.legend()
-    plt.show()
+
 
 

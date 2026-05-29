@@ -45,6 +45,10 @@ def get_lagrange_weights(x): # we get all the weights
         w.append(get_lagrange_weights_i(l[i]))
     return w
 
+def print_base(base): # help method for pretty printing
+    for b in base:
+        print(b)
+
 #############################################################################################
 def get_cNC(n, a=-1, b=1):
     #n is the amount of intervalls, x_0 is start pos (def -1) and x_n is end (def 1)
@@ -71,10 +75,6 @@ def get_GL(n): #n as defined in the lectures is the last index of the points so:
     weights = 2*v.T*v
     return ew, weights
 
-def print_base(base): # help method for pretty printing
-    for b in base:
-        print(b)
-
 def calculate_quadrature(f, t, w, a, b):
     n = len(t) - 1
     t_wrapper = fr.Fraction((b-a)/2)*t + fr.Fraction((a+b)/2) #we bring the interval from [a,b] to [-1,1]
@@ -83,34 +83,13 @@ def calculate_quadrature(f, t, w, a, b):
         res += w[i] * f(t_wrapper[i])
     res *= fr.Fraction((b-a)/2) # we multiplty to keep consistent with the intervall
     return res # we return the result of the quadrature formula
-def calculate_sum_quadrature_oNC(f, N, n, a, b):
+
+def calculate_sum_quadrature(f, N, n, a, b, method):#gets the quadrature, by summing all N intervalls, in which [ab] is divided
     points = np.linspace(a, b, N)
     res = fr.Fraction()
     for i in range(N-1):
         a_new = points[i]
         b_new = points[i+1]
-        t, w = get_oNC(n)
+        t, w = method(n)
         res += calculate_quadrature(f, t, w, a_new, b_new)
     return res
-
-def calculate_sum_quadrature_cNC(f, N, n, a, b):
-    points = np.linspace(a, b, N)
-    res = fr.Fraction()
-    for i in range(N-1):
-        a_new = points[i]
-        b_new = points[i+1]
-        t, w = get_cNC(n)
-        res += calculate_quadrature(f, t, w, a_new, b_new)
-    return res
-
-def calculate_sum_quadrature_GL(f, N, n, a, b):
-    points = np.linspace(a, b, N)
-    res = fr.Fraction()
-    for i in range(N-1):
-        a_new = points[i]
-        b_new = points[i+1]
-        t, w = get_GL(n)
-        res += calculate_quadrature(f, t, w, a_new, b_new)
-    return res
-
-
