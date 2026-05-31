@@ -5,27 +5,26 @@ import matplotlib.pyplot as plt
 
 def get_converg_rate(t, w, a = 0, b = 1, tol = 1e-10):
 
-    power = int(1)
-    rate = int(0)
-    diff = fr.Fraction()
+
+    rate = int(0) # removed power, rate tracks degree
+    diff = float(0)#float to avoid issues with fractions
 
     while diff < tol: # if the difference is too big, then we assume they are different
         f = lambda x : x**rate
-        pol_int = fr.Fraction(b**power/power) - fr.Fraction(a**power/power) # integrated exactly
+        pol_int = fr.Fraction(b**(rate+1) - a**(rate+1),(rate+1)) # integrated exactly, correct formula
         appr = quad.calculate_quadrature(f, t, w, a, b)
-        diff = fr.Fraction(np.abs(appr-pol_int))
-        power += 1
+        diff = abs(appr - float(pol_int)) #should be kept as float
         rate += 1
 
-    return rate-2
+    return rate-1 # the last one was the first one that was too big, so we have to subtract 1
 
 def plot_converg(n, method, tol = 1e-10):#one convergence func, dependant on the method
     if method == quad.get_oNC:
         title = "Open Newton Cotes"
-        conv = lambda x: x+1
+        conv = lambda x: x+1 if x % 2 == 0 else x #not symmetric like lagrange so all powers contribute
     elif method == quad.get_cNC:
         title = "Closed Newton Cotes"
-        conv = lambda x: x+1
+        conv = lambda x: x+1 if x % 2 == 0 else x #we have to check if even or odd->different max degree!!
     elif method == quad.get_GL:
         title = "Gauss-Legendre"
         conv = lambda x: 2*x+1
@@ -44,11 +43,12 @@ def plot_converg(n, method, tol = 1e-10):#one convergence func, dependant on the
     plt.figure()
     plt.plot(n_arr, r_theory, label="Analytical Convergence")
     plt.plot(n_arr, r_appr, label="Calculated Convergence")
-    plt.title("Convergnece Rate Analysis of " + title)
+    plt.title("Convergence Rate Analysis of " + title)
     plt.xlabel("Amount of Intervalls [n]")
     plt.ylabel("Convergence Rate [r]")
     plt.grid()
     plt.legend()
+    plt.show() #show plot
 
 
 
