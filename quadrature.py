@@ -63,14 +63,11 @@ def get_oNC(n, a=-1, b=1):
     return x[1:n+2], omegas
 
 def get_GL(n): #n as defined in the lectures is the last index of the points so: x_0 ... x_n, therfore n+1 points in total
-    
-    jacobian = np.zeros([n+1, n+1])    
+    J = np.zeros([n+1, n+1])    
     beta = [i/np.sqrt(4*i**2-1) for i in range(1, n+1)]
-
-    jacobian += np.diag(beta, 1)
-    jacobian += np.diag(beta, -1)
-    
-    ew, ev = np.linalg.eig(jacobian)
+    J += np.diag(beta, 1) # upper diag
+    J += np.diag(beta, -1) # lower diag
+    ew, ev = np.linalg.eig(J)
     v = ev[0]
     weights = 2*v.T*v
     return ew, weights
@@ -85,9 +82,9 @@ def calculate_quadrature(f, t, w, a, b):
     return res # we return the result of the quadrature formula
 
 def calculate_sum_quadrature(f, N, n, a, b, method):#gets the quadrature, by summing all N intervalls, in which [ab] is divided
-    points = np.linspace(a, b, N) # maybe should be N+1 or -1 idk
+    points = np.linspace(a, b, N+1) # maybe should be N+1 or -1 idk
     res = fr.Fraction()
-    for i in range(N-1):
+    for i in range(N):
         a_new = points[i]
         b_new = points[i+1]
         t, w = method(n)

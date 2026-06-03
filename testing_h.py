@@ -6,7 +6,7 @@ def f(x):
     return 1/(1e-2+x**2)
 
 n = [1, 2, 5, 7] #n in the intervall self
-N = 50 #intervalls
+N = 100 #intervalls
 a = -1
 b = 1
 

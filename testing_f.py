@@ -19,11 +19,11 @@ def naive_inter(x, y, xi):#copied from last HW
 
 
 n = 2
-a0 = 2
-a1 = 0
-a2 = -1
+a0 = 1
+a1 = 2
+a2 = 3
 a3 = 4
-a4 = -5
+a4 = 5
 
 pol_4 = lambda x : (x**4)*a4 + (x**3)*a3 + (x**2)*a2 + (x)*a1 + a0 # our polynom
 
