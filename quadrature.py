@@ -85,7 +85,7 @@ def calculate_quadrature(f, t, w, a, b):
     return res # we return the result of the quadrature formula
 
 def calculate_sum_quadrature(f, N, n, a, b, method):#gets the quadrature, by summing all N intervalls, in which [ab] is divided
-    points = np.linspace(a, b, N)
+    points = np.linspace(a, b, N) # maybe should be N+1 or -1 idk
     res = fr.Fraction()
     for i in range(N-1):
         a_new = points[i]

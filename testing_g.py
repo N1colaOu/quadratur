@@ -30,16 +30,16 @@ for i in n:
     x_cNC, w_cNC = quad.get_cNC(i)
     x_GL, w_GL = quad.get_GL(i)
     int1_appr_oNC.append(quad.calculate_quadrature(f1, x_oNC, w_oNC, a1, b1))
-    int1_appr_cNC.append(quad.calculate_quadrature(f1, x_oNC, w_oNC, a1, b1))
-    int1_appr_GL.append(quad.calculate_quadrature(f1, x_oNC, w_oNC, a1, b1))
+    int1_appr_cNC.append(quad.calculate_quadrature(f1, x_cNC, w_cNC, a1, b1))
+    int1_appr_GL.append(quad.calculate_quadrature(f1, x_GL, w_GL, a1, b1))
     
     int2_appr_oNC.append(quad.calculate_quadrature(f2, x_oNC, w_oNC, a2, b2))
-    int2_appr_cNC.append(quad.calculate_quadrature(f2, x_oNC, w_oNC, a2, b2))
-    int2_appr_GL.append(quad.calculate_quadrature(f2, x_oNC, w_oNC, a2, b2))
+    int2_appr_cNC.append(quad.calculate_quadrature(f2, x_cNC, w_cNC, a2, b2))
+    int2_appr_GL.append(quad.calculate_quadrature(f2, x_GL, w_GL, a2, b2))
     
     int3_appr_oNC.append(quad.calculate_quadrature(f3, x_oNC, w_oNC, a3, b3))
-    int3_appr_cNC.append(quad.calculate_quadrature(f3, x_oNC, w_oNC, a3, b3))
-    int3_appr_GL.append(quad.calculate_quadrature(f3, x_oNC, w_oNC, a3, b3))
+    int3_appr_cNC.append(quad.calculate_quadrature(f3, x_cNC, w_cNC, a3, b3))
+    int3_appr_GL.append(quad.calculate_quadrature(f3, x_GL, w_GL, a3, b3))
 
 int1_exact = np.exp(2)-1
 int2_exact = np.pi/2
